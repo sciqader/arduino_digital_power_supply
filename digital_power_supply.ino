@@ -241,7 +241,7 @@ void setup() {
   Serial.begin(9600); // for debuging
   pinMode(voltage_in,INPUT);
   pinMode(PWM_PIN,OUTPUT);
-  TCCR2B = TCCR2B & B11111000 | B00000001;      // pin 3 PWM frequency of 30.64 Hz
+  TCCR2B = TCCR2B & B11111000 | B00000001;      // pin 3 PWM frequency of 31372.55 Hz
   pinMode(pinA, INPUT); // set pinA as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
   pinMode(pinB, INPUT); // set pinB as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
   pinMode(selectSwitch, INPUT_PULLUP);
