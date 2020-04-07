@@ -30,13 +30,17 @@ U8GLIB_SH1106_128X64 u8g(13, 12, 10, 9, 8);
 
 //inputs for the buck converter
 int voltage_in = A0;
+int current_in = A1;
 int PWM_PIN = 11;
 //variables
 int pwm_value = 100;
 float set_voltage = 10;
-float set_current = 0.10;
+float set_current = 1;
 float real_output = 0;
 float output_current = 0;
+float ACSoffset = 2500;
+float mVtoAmp = 100; // for a 20A module
+float current_offset = 0.0; // that is my current offset
 unsigned long previousMillis = 0; 
 unsigned long currentMillis = 0;
 const int numReadings = 10;
@@ -240,8 +244,9 @@ void subSubMenu(int item){
 void setup() {
   Serial.begin(9600); // for debuging
   pinMode(voltage_in,INPUT);
+  pinMode(current_in,INPUT);
   pinMode(PWM_PIN,OUTPUT);
-  TCCR2B = TCCR2B & B11111000 | B00000001;      // pin 3 PWM frequency of 31372.55 Hz
+  TCCR2B = TCCR2B & B11111000 | B00000111;      // pin 11 PWM frequency of 30.64 Hz
   pinMode(pinA, INPUT); // set pinA as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
   pinMode(pinB, INPUT); // set pinB as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
   pinMode(selectSwitch, INPUT_PULLUP);
@@ -312,10 +317,18 @@ float read_real_voltage(){
   //return voltage;
 }
 //-----------------
+//read the output current
+float read_output_current(){
+  float mV = analogRead(current_in)/1024.*5000;
+  float I = -(mV - ACSoffset)/mVtoAmp;
+  return (I - current_offset);
+}
+//------------------
 //main loop
 void loop() {
 
   real_output = read_real_voltage();
+  output_current = read_output_current();
   Serial.println(real_output, 2);
   
   // The select switch is pulled high, hence the pin goes low if the switch is pressed. 
