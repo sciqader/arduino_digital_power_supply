@@ -246,7 +246,7 @@ void setup() {
   pinMode(voltage_in,INPUT);
   pinMode(current_in,INPUT);
   pinMode(PWM_PIN,OUTPUT);
-  TCCR2B = TCCR2B & B11111000 | B00000111;      // pin 11 PWM frequency of 30.64 Hz
+  TCCR2B = TCCR2B & B11111000 | B00000011;      // pin 11 PWM frequency of 980.39 Hz
   pinMode(pinA, INPUT); // set pinA as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
   pinMode(pinB, INPUT); // set pinB as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
   pinMode(selectSwitch, INPUT_PULLUP);
@@ -367,6 +367,6 @@ void loop() {
     draw();
   } while( u8g.nextPage() );
   
-  delay(100);
+  delay(10);
 
 }
